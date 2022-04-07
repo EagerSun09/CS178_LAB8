@@ -64,28 +64,34 @@ function createVis() {
 // React to 'brushed' event and update domain (x-scale; stacked area chart) if selection is not empty
 function brushed() {
     var selection = d3.brushSelection(d3.select(".brush").node());
-	if (selection) {
-		svg.property("value", selection.map(x.invert, x).map(d3.utcDay.round));
-		svg.dispatch("input");
-	}
+
     /**** INSERT CODE ******/
     // add code to make the stacked area chart respond to the selection
     // hint: the easiest way to do this is to change the x domain of the stacked area chart
     //       using the selection variable above
     // hint2: don't forget to make the stacked area chart update itself afterwards
     /**** END INSERT CODE ******/
+
+	if (selection) {
+		var xMin = timeline.x.invert(selection[0]), xMax = timeline.x.invert(selection[1]);
+		areachart.x.domain(d3.extent([xMin, xMax]));
+		areachart.updateVis();
+	}
 }
 
 function brushend() {
-	var selection = d3.brushSelection(d3.select(".brush").node());
-	//if (!selection) {
-	//	gb.call(brush.move, defaultSelection);
-	//}
+    var selection = d3.brushSelection(d3.select(".brush").node());
+
     /**** INSERT CODE ******/
     // add code to reset the stacked area chart if a brush has been cleared.
     // hint: you will know when a brush is cleared if the selection is null
     // hint2: don't forget to make the stacked area chart update itself afterwards
     /**** END INSERT CODE ******/
+	
+	if (!selection) {
+		areachart.x.domain(d3.extent(timeline.displayData, function (d) { return d.Year; }));
+		areachart.updateVis();
+	}
 }
 
 // -----------------------------------------------------------------------------------------

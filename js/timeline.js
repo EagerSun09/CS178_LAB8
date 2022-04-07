@@ -66,10 +66,17 @@ Timeline.prototype.initVis = function () {
   // Initialize brush component
     // hint: look at d3.brushX()
     // hint2: add callbacks using the functions brushed and brushend in main.js
-
+    const brush = d3.brushX()
+                  .extent([[0, 0.5], [vis.width - vis.margin.right, 100 - vis.margin.bottom + 0.5]])
+                  .on("brush", brushed)
+                  .on("end", brushend);
 
     // Append brush component here
     //  hint: you need to add the brush to the DOM
+   
+    vis.svg.append("g")
+          .attr("class", "brush")
+          .call(brush);
 
 // -------------------------------- END INSERT CODE --------------------------------------
 
